@@ -1,0 +1,11 @@
+{
+  "name": "j4d-web",
+  "private": true,
+  "devDependencies": {
+    "tailwindcss": "^4.3.0",
+    "@tailwindcss/cli": "^4.3.0"
+  },
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/input.css -o ./dist/styles.css --minify"
+  }
+}
