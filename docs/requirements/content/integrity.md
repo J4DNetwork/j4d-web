@@ -1,7 +1,7 @@
 ---
 domain: CONTENT
 last_updated: 2026-06-09
-status: Draft
+status: Approved
 ---
 
 # Requirements: Why-Us Copy Integrity

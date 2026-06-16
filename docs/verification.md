@@ -1,6 +1,7 @@
 ---
 date: 2026-06-12
-status: pass-pending-operator
+status: pass
+operator_actions_completed: 2026-06-16
 plan_ref: docs/plan.md
 ---
 
@@ -24,6 +25,11 @@ push**; production-complete is gated only on the operator actions in the final
 section. Status `pass-pending-operator` is chosen deliberately because the
 end-to-end deploy (custom domain still resolving, live styled render) has NOT
 happened yet and must not be reported as done.
+
+> **UPDATE 2026-06-16 — operator actions completed; status promoted to `pass`.**
+> All three deferred operator actions were performed and the live deploy is
+> confirmed (see "Live Smoke Test (post-deploy)" below). REQ-DEPLOY-011 and the
+> live smoke now PASS. The cycle is production-complete.
 
 ## Phase Detected
 
@@ -95,7 +101,7 @@ for the REQ-CONTENT-009 body contract.
 | REQ-DEPLOY-007 assemble copies all assets | pass | `mkdir -p _site/dist`; `cp index.html logo.png _site/`; `cp dist/styles.css _site/dist/styles.css`; `cp CNAME _site/CNAME` |
 | REQ-DEPLOY-008 OG/Twitter meta, og:url | pass | all 9 tags present & well-formed; `og:type=website`, `og:url=https://j4d.net`, `og:image`/`twitter:image=https://j4d.net/logo.png`, `twitter:card=summary`; values mirror title/description |
 | REQ-DEPLOY-009 favicon | pass | `<link rel="icon" href="logo.png">` present (line 10) |
-| REQ-DEPLOY-011 Pages-source UI switch | deferred-to-operator | UI-only, non-CI by design (D6); operator must flip Settings→Pages→Source→"GitHub Actions" |
+| REQ-DEPLOY-011 Pages-source UI switch | pass (2026-06-16) | Flipped via `PUT /repos/J4DNetwork/j4d-web/pages` `build_type=workflow`; custom domain `j4d.net` persisted; live deploy confirmed (see Live Smoke Test section) |
 
 ## User-Perspective Validation
 
@@ -162,3 +168,27 @@ After push, the operator must complete the three Outstanding Operator Actions to
 reach production-complete; re-run the live-smoke portion of Chunk 6 then. The
 active plan may be archived to `docs/plan-history/` once the live deploy is
 confirmed.
+
+## Live Smoke Test (post-deploy) — 2026-06-16
+
+Operator actions completed by orchestrator on explicit instruction:
+
+1. **Committed** `b3d511c` to `main` (20 files; build artifacts gitignored).
+2. **Pages source flipped** `legacy` → `workflow` via `PUT /repos/J4DNetwork/j4d-web/pages` (`build_type=workflow`); CNAME `j4d.net` retained.
+3. **Pushed** `main`; "Deploy to GitHub Pages" workflow run `27610426854` succeeded (29s).
+
+Live verification against `https://j4d.net` (`curl`):
+
+| Check | Result | Evidence |
+|-------|--------|----------|
+| Custom domain resolves (CNAME preserved through source switch) | PASS | `GET https://j4d.net` → `200` |
+| Compiled CSS served (Actions build+deploy working) | PASS | `https://j4d.net/dist/styles.css` → `200`, `text/css`, 12980 bytes |
+| `logo.png` loads | PASS | `200` |
+| Links `dist/styles.css` | PASS | present in served HTML |
+| Zero `cdn.tailwindcss.com` / zero inline `tailwind.config` | PASS | absent in served HTML |
+| New "Why Us" copy live ("talked directly with") | PASS | present |
+| No "months researching" overreach | PASS | absent |
+| `og:url=https://j4d.net`, `twitter:card`, favicon | PASS | all present |
+| Consulting positioning intact (Curriculum Team Consulting) | PASS | present |
+
+REQ-DEPLOY-011: **PASS** (Pages source = GitHub Actions; custom domain persisted). Live smoke (Chunk 6 t3): **PASS**. No failures. Cycle production-complete.

@@ -1,5 +1,5 @@
 ---
-status: Draft
+status: Approved
 last_updated: 2026-06-09
 requires: [REQ-DEPLOY-005, REQ-DEPLOY-006, REQ-DEPLOY-007, REQ-DEPLOY-008, REQ-DEPLOY-009, REQ-DEPLOY-011]
 ---

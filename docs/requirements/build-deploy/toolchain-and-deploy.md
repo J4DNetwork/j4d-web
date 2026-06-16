@@ -1,7 +1,7 @@
 ---
 domain: DEPLOY
 last_updated: 2026-06-09
-status: Draft
+status: Approved
 ---
 
 # Requirements: Build Toolchain & Pages Deploy

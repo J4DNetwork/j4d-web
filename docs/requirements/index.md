@@ -1,6 +1,6 @@
 ---
 version: 1.0
-status: Draft
+status: Approved
 last_updated: 2026-06-09
 ---
 
